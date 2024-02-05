@@ -25,6 +25,19 @@ void delay(){
     
 }
 
+void __interrupt() isr(){
+    uint8_t dummy_read;
+    /* Check if port B change comparison interrupt*/
+    if (INTCONbits.RBIF == 1) {
+        /* To clear the interrupt first read the PORTB
+         then clear the RBIF flag */
+        
+        dummy_read = PORTB;
+        INTCONbits.RBIF = 0;
+        
+    }
+}
+
 
 static void PORTA_config()
 {
@@ -62,22 +75,32 @@ static void PORTA_config()
 static void PORTB_config()
 {
     /* we want to configure POTB as inputs*/
-
+    /* only RB4 to RB7 configured as inputs only 
+     * support change comparison interrupts */
     /* The weak pull up can be enabled or disabled
      in the OPTION_REGs RBPU bit, 0 means disabled , 1 to enable*/
     OPTION_REGbits.nRBPU = 1;
     
-    /* RBIF flag is set in the INTCON register, RBIE interrupt flag */
-    /*first clear the RBIF flag before enabling the interrupt*/
-    //INTCONbits.RBIF = 0;
-    //INTCONbits.RBIE = 1;
+
     
-    /* now change */
-    
-    //INTCONbits.GIE = 1;
+    /* configure the PORTB pins as inputs*/ 
     TRISBbits.TRISB0 = 1;
     TRISBbits.TRISB1 = 1;
     TRISBbits.TRISB2 = 1;
+    TRISBbits.TRISB3 = 1;
+    
+    /* we want to turn RB4 to RB7 
+     * interrupts off by making them outputs (they are default inputs)*/
+    TRISBbits.TRISB4 = 0; 
+    TRISBbits.TRISB5 = 1;
+    TRISBbits.TRISB6 = 0; 
+    TRISBbits.TRISB7 = 0; 
+    /* RBIF flag is set in the INTCON register, RBIE interrupt flag */
+    /*first clear the RBIF flag before enabling the interrupt*/
+    INTCONbits.RBIF = 0;
+    INTCONbits.RBIE = 1;
+    
+    INTCONbits.GIE = 1;
     
 }
 
@@ -104,14 +127,14 @@ void main(void) {
     
     while (1)
     {
-        //delay();
+        delay();
 
-        //PORTA ^= 0x3F;/* this is how we toggle */
-        PORTA ^= 0x1F; /* we are going to use RB5 as the polling light*/
-        if (PORTBbits.RB1 == 0) { /* we are polling */
+        PORTA ^= 0x3F;/* this is how we toggle */
+        //PORTA ^= 0x1F; /* we are going to use RB5 as the polling light*/
+        /*if (PORTBbits.RB1 == 0) { 
             PORTAbits.RA5 = 1;
         } else {
             PORTAbits.RA5 = 0;
-        }
+        }*/
     }
 }
