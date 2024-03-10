@@ -8,8 +8,8 @@
 #define XTAL_FREQUENCY 4000000 /* 4 mega HZ */
 #include <xc.h>
 #include <pic16f877a.h>
-#include "GPIO_driver.h"
-#include "Timer_driver.h"
+#include "System/GPIO_driver.h"
+#include "System/Timer_driver.h"
 
 #pragma config FOSC = XT        // Oscillator Selection bits (XT oscillator)
 #pragma config WDTE = OFF       // Watchdog Timer Enable bit (WDT disabled)

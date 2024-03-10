@@ -16,6 +16,8 @@ void PORTA_config();
 
 void PORTB_config();
 
+void PORTD_config();
+
 void inline PORTB_int_isr();
 
 
