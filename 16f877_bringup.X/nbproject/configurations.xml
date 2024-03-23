@@ -5,6 +5,8 @@
                    displayName="Header Files"
                    projectFiles="true">
       <logicalFolder name="f2" displayName="Drivers" projectFiles="true">
+        <itemPath>Drivers/button_inputs.h</itemPath>
+        <itemPath>Drivers/display_multiplexer.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f1" displayName="System" projectFiles="true">
         <itemPath>System/GPIO_driver.h</itemPath>
@@ -24,6 +26,8 @@
                    displayName="Source Files"
                    projectFiles="true">
       <logicalFolder name="f1" displayName="Drivers" projectFiles="true">
+        <itemPath>Drivers/display_multiplexer.c</itemPath>
+        <itemPath>Drivers/button_inputs.c</itemPath>
       </logicalFolder>
       <logicalFolder name="f2" displayName="System" projectFiles="true">
         <itemPath>System/GPIO_driver.c</itemPath>

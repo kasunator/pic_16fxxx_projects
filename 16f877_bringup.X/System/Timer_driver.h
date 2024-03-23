@@ -18,7 +18,7 @@ void inline Timer1_isr();
 
 uint16_t get_global_time_ms();
 
-uint16_t reset_global_time();
+void reset_global_time();
 
 uint8_t ms_timer_init();
 

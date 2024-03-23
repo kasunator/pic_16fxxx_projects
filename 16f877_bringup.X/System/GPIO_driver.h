@@ -16,7 +16,29 @@ void PORTA_config();
 
 void PORTB_config();
 
+void PORTC_config();
+
 void PORTD_config();
+
+void PORTE_config();
+
+void inline set_PORTA_pins(uint8_t bit_field);
+void inline set_PORTB_pins(uint8_t bit_field);
+void inline set_PORTC_pins(uint8_t bit_field);
+void inline set_PORTD_pins(uint8_t bit_field);
+void inline set_PORTE_pins(uint8_t bit_field);
+
+void inline clear_PORTA_pins(uint8_t bit_field);
+void inline clear_PORTB_pins(uint8_t bit_field);
+void inline clear_PORTC_pins(uint8_t bit_field);
+void inline clear_PORTD_pins(uint8_t bit_field);
+void inline clear_PORTE_pins(uint8_t bit_field);
+
+void inline toggle_PORTA_pins(uint8_t bit_field);
+void inline toggle_PORTB_pins(uint8_t bit_field);
+void inline toggle_PORTC_pins(uint8_t bit_field);
+void inline toggle_PORTD_pins(uint8_t bit_field);
+void inline toggle_PORTE_pins(uint8_t bit_field);
 
 void inline PORTB_int_isr();
 

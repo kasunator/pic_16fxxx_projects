@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <xc.h>
 #include <pic16f877a.h>
+#include <System\Timer_driver.h>
 
 uint16_t load_count = 64636; /* for 1ms 65635 - c +1*/
 
@@ -111,7 +112,7 @@ uint16_t get_global_time_ms()
     return global_time;
 }
 
-uint16_t reset_global_time()
+void reset_global_time()
 {
     global_time = 0;
 }
