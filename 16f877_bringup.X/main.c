@@ -48,22 +48,15 @@ static void PORTA_toggle_RA1()
 
 uint8_t read_value = 0;
 void main(void) {
-    //RP0
-    uint8_t timer_hdl_l = ms_timer_init();
-    uint8_t timer_hdl_2 = ms_timer_init();
-    
+
+    /* system level init*/
     PORTA_config();
     PORTB_config();
     Timer1_config();
     
-    //PORTAbits.RA0 = 1;
-    //PORTAbits.RA1 = 1;
-    //PORTAbits.RA2 = 1;
-    //PORTAbits.RA3 = 1;
-    //PORTAbits.RA4 = 1;
-    //PORTAbits.RA5 = 1;
-
-    
+    uint8_t timer_hdl_l = ms_timer_init();
+    uint8_t timer_hdl_2 = ms_timer_init();
+       
     while (1)
     {
         ms_timer_task();

@@ -34,11 +34,11 @@
         <itemPath>System/Timer_driver.c</itemPath>
       </logicalFolder>
       <itemPath>main.c</itemPath>
+      <itemPath>marquee.c</itemPath>
     </logicalFolder>
   </logicalFolder>
   <sourceRootList>
-    <Elem>System</Elem>
-    <Elem>Drivers</Elem>
+    <Elem>.</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
