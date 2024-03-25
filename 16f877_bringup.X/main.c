@@ -11,6 +11,8 @@
 #include "System/GPIO_driver.h"
 #include "System/Timer_driver.h"
 
+
+
 #pragma config FOSC = XT        // Oscillator Selection bits (XT oscillator)
 #pragma config WDTE = OFF       // Watchdog Timer Enable bit (WDT disabled)
 #pragma config PWRTE = OFF      // Power-up Timer Enable bit (PWRT disabled)

@@ -10,6 +10,7 @@
             <make-dep-projects/>
             <sourceRootList>
                 <sourceRootElem>System</sourceRootElem>
+                <sourceRootElem>Drivers</sourceRootElem>
             </sourceRootList>
             <confList>
                 <confElem>

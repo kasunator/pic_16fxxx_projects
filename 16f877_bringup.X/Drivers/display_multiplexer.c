@@ -7,8 +7,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "System/Timer_driver.h"
-#include "System/GPIO_driver.h"
+#include "../System/Timer_driver.h"
+#include "../System/GPIO_driver.h"
 
 /*
  ------- clk2 end ------
@@ -64,34 +64,34 @@ static uint8_t timer_handle = 0xFF;
 
 
 static void set_row_pattern(uint8_t *pattern){
-    set_PORTD_pins(pattern);
+    set_PORTD_pins(*pattern);
 }
 
-static uint8_t* red_array_1[8];
-static uint8_t* green_array_1[8];
-static uint8_t* red_array_2[8];
-static uint8_t* green_array_2[8];
+static uint8_t* red_array_1;
+static uint8_t* green_array_1;
+static uint8_t* red_array_2;
+static uint8_t* green_array_2;
 
 static uint8_t horizontal_index =0;
 static uint8_t red_index =0;
 static uint8_t green_index =0;
 
-void display_multiplexer_set_red_1_array(uint8_t* data_buffer)
+void display_multiplexer_set_red_1_array(uint8_t data_buffer[])
 {
     red_array_1 = data_buffer;
 }
 
-void display_multiplexer_set_green_1_array(uint8_t* data_buffer)
+void display_multiplexer_set_green_1_array(uint8_t data_buffer[])
 {
     green_array_2 = data_buffer;
 }
 
-void display_multiplexer_set_red_2_array(uint8_t* data_buffer)
+void display_multiplexer_set_red_2_array(uint8_t data_buffer[])
 {
     red_array_2 = data_buffer;
 }
 
-void display_multiplexer_set_green_2_array(uint8_t* data_buffer)
+void display_multiplexer_set_green_2_array(uint8_t data_buffer[])
 {
     green_array_2 = data_buffer;
 }

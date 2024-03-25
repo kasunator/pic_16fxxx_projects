@@ -11,7 +11,8 @@
 #ifdef	__cplusplus
 extern "C" {
 #endif
-
+#include <xc.h>
+    
 void Timer1_config();
 
 void inline Timer1_isr();

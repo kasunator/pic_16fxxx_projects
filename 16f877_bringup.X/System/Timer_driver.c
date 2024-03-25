@@ -9,7 +9,6 @@
 #include <stdlib.h>
 #include <xc.h>
 #include <pic16f877a.h>
-#include <System\Timer_driver.h>
 
 uint16_t load_count = 64636; /* for 1ms 65635 - c +1*/
 
