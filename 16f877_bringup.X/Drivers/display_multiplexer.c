@@ -45,17 +45,27 @@
  */
 
 #define LINE_PERIOD 20 /*20 ms this would be equivalen to horizontal frequency of Tv*/
+#define MINIMUM_PULSE_WIDTH 1 /* one milli second */
+
 #define  TOTAL_HORIZONTAL 32
 #define TOTAL_LINES_PER_COLOR 16
 #define CLK3_BOUNDRY 7
 #define CLK4_BOUNDRY 15
 #define CLK1_BOUNDRY 23 
 #define CLK2_BOUNDRY 31 
+/*4017 minimum reset pulse width 260 ns, removal time 400ns */
+
+#define RESET_MATRIX_PIN_BITFIELD  0x02//RE2 
+#define CLK3_PIN_BITFIELD 0x04  //RA4
+#define CLK4_PIN_BITFIELD 0x00//RC0
+#define CLK1_PIN_BITFIELD 0x01//RE0
+#define CLK2_PIN_BITFIELD  0x02//RE1
 
 typedef enum{
     INIT,
     RESET_STATE,
-    RUN_STATE
+    RUN_STATE,
+    CLOCK_HIGH_DELAY
 }enum_mltplxr_state;
 /*
 uint8_t ms_timer_init();
@@ -64,6 +74,7 @@ uint32_t ms_timer_get(uint8_t timer_handle);
 */
 static uint8_t mltplxr_state = 0;
 static uint8_t timer_handle = 0xFF;
+static uint8_t pulse_timer_handle = 0xFF;
 
 
 static void set_row_pattern(uint8_t *pattern){
@@ -84,6 +95,7 @@ static uint8_t horizontal_index =0;
 static uint8_t red_index = 0;
 static uint8_t green_index = 0;
 static uint8_t frame_complete_flag = 0;
+static uint8_t reset_pulse_flag = 0;
 
 void display_multiplexer_set_red_array(uint8_t data_buffer[])
 {
@@ -104,6 +116,55 @@ void reset_frame_complete_flag()
     frame_complete_flag = 0;
 }
 
+static inline void set_reset_matrix()
+{
+    set_PORTE_pins(RESET_MATRIX_PIN_BITFIELD);
+}
+
+static inline void reset_reset_matrix()
+{
+    clear_PORTE_pins(RESET_MATRIX_PIN_BITFIELD);
+}
+
+static inline void set_clk_1()
+{
+    set_PORTE_pins(CLK1_PIN_BITFIELD);
+}
+
+static inline void reset_clk_1()
+{
+    clear_PORTE_pins(CLK1_PIN_BITFIELD);
+}
+
+static inline void set_clk_2()
+{
+    set_PORTE_pins(CLK2_PIN_BITFIELD);
+}
+
+static inline static void reset_clk_2()
+{
+    clear_PORTE_pins(CLK2_PIN_BITFIELD);
+}
+
+static inline static void set_clk_3()
+{
+    set_PORTE_pins(CLK3_PIN_BITFIELD);
+}
+
+static inline static void reset_clk_3()
+{
+    clear_PORTE_pins(CLK3_PIN_BITFIELD);
+}
+
+inline static void set_clk_4()
+{
+    set_PORTE_pins(CLK4_PIN_BITFIELD);
+}
+
+static inline static void reset_clk_4()
+{
+    clear_PORTE_pins(CLK4_PIN_BITFIELD);
+}
 /*void display_multiplexer_set_red_2_array(uint8_t data_buffer[])
 {
     red_array_2_next = data_buffer;
@@ -119,6 +180,7 @@ void display_multiplexer_task()
     switch(mltplxr_state){
     case INIT:
         timer_handle = ms_timer_init();
+        pulse_timer_handle = ms_timer_init();
         ms_timer_reset(timer_handle);
         mltplxr_state = RUN_STATE;
         break;
@@ -129,12 +191,17 @@ void display_multiplexer_task()
         green_index = 0;
         red_array_1 = red_array_1_next; 
         green_array_1 = green_array_1_next;
-        mltplxr_state = RUN_STATE;
+        set_row_pattern(red_array_1[TOTAL_LINES_PER_COLOR -  red_index]);
+        red_index++;
+        ms_timer_reset(timer_handle);
+        ms_timer_reset(pulse_timer_handle);
+        set_clk_3();
+        mltplxr_state = CLOCK_HIGH_DELAY;
         break;
     case RUN_STATE:
         if (ms_timer_get(timer_handle) >LINE_PERIOD) {
             ms_timer_reset(timer_handle);
-
+            ms_timer_reset(pulse_timer_handle);
             
             if (horizontal_index < TOTAL_HORIZONTAL) {
                 /* if the horizontal index in odd then 
@@ -148,21 +215,42 @@ void display_multiplexer_task()
                     red_index++;
                 }
                 if ( horizontal_index > 0 && horizontal_index <= CLK3_BOUNDRY) {
-                    //toggle clk 3
+                    //set clk 3
+                    set_clk_3();
                 } else if (horizontal_index <= CLK4_BOUNDRY ) {
-                    //toggle clk 4
+                    //set clk 4
+                    set_clk_4();
                 } else if (horizontal_index <= CLK1_BOUNDRY) {
-                    //toggle clk 1
+                    //set clk 1
+                    set_clk_1();
                 } else if (horizontal_index <= CLK2_BOUNDRY) {
-                    //toggle clk 2
+                    //set clk 2
+                    set_clk_2();
                 } 
                 
                 horizontal_index++; /*increment the horizontal index */
             } else {
                 frame_complete_flag  = 1;
-                mltplxr_state = RESET_STATE;
+                set_reset_matrix();
+                reset_pulse_flag = 1;
+                mltplxr_state = CLOCK_HIGH_DELAY;
             }
         }
         break;
+    case CLOCK_HIGH_DELAY:
+        if (ms_timer_get(pulse_timer_handle) >MINIMUM_PULSE_WIDTH ){
+            reset_reset_matrix();
+            reset_clk_1();
+            reset_clk_2();
+            reset_clk_3();
+            reset_clk_4();
+            if (reset_pulse_flag == 1) {
+                reset_pulse_flag = 0;
+                mltplxr_state = RESET_STATE;
+            } else {
+                mltplxr_state = RUN_STATE;
+            }
+        }
+    break;
     }
 }

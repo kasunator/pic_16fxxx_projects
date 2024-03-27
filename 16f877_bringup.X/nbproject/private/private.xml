@@ -5,6 +5,7 @@
         <group>
             <file>file:/C:/private%20projects/PIC_projects/16f877_bringup.X/System/GPIO_driver.h</file>
             <file>file:/C:/private%20projects/PIC_projects/16f877_bringup.X/System/Timer_driver.c</file>
+            <file>file:/C:/private%20projects/PIC_projects/16f877_bringup.X/marquee.c</file>
             <file>file:/C:/private%20projects/PIC_projects/16f877_bringup.X/Drivers/display_multiplexer.h</file>
             <file>file:/C:/private%20projects/PIC_projects/16f877_bringup.X/main.c</file>
             <file>file:/C:/private%20projects/PIC_projects/16f877_bringup.X/Drivers/button_inputs.c</file>
