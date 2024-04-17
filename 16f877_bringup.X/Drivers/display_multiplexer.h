@@ -7,7 +7,7 @@
 
 
 #ifndef DISPLAY_MULTIPLEXER_H
-#define	DISPALY_MULTIPLEXER_H
+#define	DISPLAY_MULTIPLEXER_H
 
 #ifdef	__cplusplus
 extern "C" {
@@ -23,6 +23,30 @@ void reset_frame_complete_flag();
     
 void display_multiplexer_task();
 
+void show_Test_line();
+
+
+inline void set_row_pattern(uint8_t pattern);
+
+inline void set_reset_matrix();
+
+inline void reset_reset_matrix();
+
+inline void set_clk_1();
+
+inline void reset_clk_1();
+
+inline void set_clk_2();
+
+inline void reset_clk_2();
+
+inline void set_clk_3();
+
+inline void reset_clk_3();
+
+inline void set_clk_4();
+
+inline void reset_clk_4();
 
 
 #ifdef	__cplusplus

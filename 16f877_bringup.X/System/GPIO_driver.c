@@ -112,8 +112,8 @@ void PORTB_config()
     /* The weak pull up can be enabled or disabled
      in the OPTION_REGs RBPU bit, 0 means disabled , 1 to enable*/
     /* all the button have external pull downs, so we turn the internal 
-     pull-up*/
-    OPTION_REGbits.nRBPU = 0;
+     pull-up off*/
+    //OPTION_REGbits.nRBPU = 0;
     
     /* configure the PORTB pins as inputs*/ 
     TRISBbits.TRISB0 = 1; /* button up */
@@ -169,22 +169,35 @@ void PORTD_config()
     PORTD = 0x00;
     /* Setting '1' a TRISD to make the pin input (default on reset)
     * Resetting '0' a TRISD to 0 makes the pin output  */
-    /* RE0 Row1 */
+    /* RD0 Row1 */
     TRISDbits.TRISD0  = 0;
-    /* RE1 Row2 */
+    /* RD1 Row2 */
     TRISDbits.TRISD1  = 0;
-    /* RE2 Row3 */
+    /* RD2 Row3 */
     TRISDbits.TRISD2  = 0;
-    /* RE3 Row4 */
+    /* RD3 Row4 */
     TRISDbits.TRISD3  = 0;
-    /* RE4 Row5 */
+    /* RD4 Row5 */
     TRISDbits.TRISD4  = 0;
-    /* RE5 Row6 */
+    /* RD5 Row6 */
     TRISDbits.TRISD5  = 0;
-    /* RE6 Row7 */
+    /* RD6 Row7 */
     TRISDbits.TRISD6  = 0;
-    /* Re7 Row8 */
+    /* RD7 Row8 */
     TRISDbits.TRISD7  = 0;
+}
+
+void PORTE_config()
+{
+    PORTE = 0x00;
+    /* Setting '1' a TRISD to make the pin input (default on reset)
+    * Resetting '0' a TRISD to 0 makes the pin output  */
+    /* RE0 Row1 */
+    TRISEbits.TRISE0  = 0;
+    /* RE1 Row2 */
+    TRISEbits.TRISE1  = 0;
+    /* RE2 Row3 */
+    TRISEbits.TRISE2  = 0;
 }
 
 void inline set_PORTA_pins(uint8_t bit_field)

@@ -59,7 +59,7 @@ void Timer1_config()
     /* enable peripheral interrupts*/
     INTCONbits.PEIE = 1;
     /* enable global interrupts */
-    INTCONbits.PEIE = 1;
+    INTCONbits.GIE = 1;
     /* Now we can start the timer*/
     T1CONbits.TMR1ON = 1;
     

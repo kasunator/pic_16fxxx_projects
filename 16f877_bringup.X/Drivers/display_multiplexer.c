@@ -55,9 +55,9 @@
 #define CLK2_BOUNDRY 31 
 /*4017 minimum reset pulse width 260 ns, removal time 400ns */
 
-#define RESET_MATRIX_PIN_BITFIELD  0x02//RE2 
-#define CLK3_PIN_BITFIELD 0x04  //RA4
-#define CLK4_PIN_BITFIELD 0x00//RC0
+#define RESET_MATRIX_PIN_BITFIELD  0x04//RE2 
+#define CLK3_PIN_BITFIELD 0x10  //RA4
+#define CLK4_PIN_BITFIELD 0x01//RC0
 #define CLK1_PIN_BITFIELD 0x01//RE0
 #define CLK2_PIN_BITFIELD  0x02//RE1
 
@@ -77,9 +77,7 @@ static uint8_t timer_handle = 0xFF;
 static uint8_t pulse_timer_handle = 0xFF;
 
 
-static void set_row_pattern(uint8_t *pattern){
-    set_PORTD_pins(*pattern);
-}
+
 
 static uint8_t* red_array_1;
 static uint8_t* green_array_1;
@@ -116,54 +114,63 @@ void reset_frame_complete_flag()
     frame_complete_flag = 0;
 }
 
-static inline void set_reset_matrix()
+inline void set_row_pattern(uint8_t pattern){
+    set_PORTD_pins(pattern);
+}
+
+
+
+inline void set_reset_matrix()
 {
     set_PORTE_pins(RESET_MATRIX_PIN_BITFIELD);
 }
 
-static inline void reset_reset_matrix()
+inline void reset_reset_matrix()
 {
     clear_PORTE_pins(RESET_MATRIX_PIN_BITFIELD);
 }
 
-static inline void set_clk_1()
+inline void set_clk_1()
 {
     set_PORTE_pins(CLK1_PIN_BITFIELD);
 }
 
-static inline void reset_clk_1()
+inline void reset_clk_1()
 {
     clear_PORTE_pins(CLK1_PIN_BITFIELD);
 }
 
-static inline void set_clk_2()
+inline void set_clk_2()
 {
     set_PORTE_pins(CLK2_PIN_BITFIELD);
 }
 
-static inline static void reset_clk_2()
+inline void reset_clk_2()
 {
     clear_PORTE_pins(CLK2_PIN_BITFIELD);
 }
-
-static inline static void set_clk_3()
+/* clk3 is port RA4 which has only internal pull down, 
+ * so we have to put and external pull up resistor
+ * so set and reset is inverted i.e we have to clear the GPIO to
+ * make the clk go high and set the gpio high to  make the clk go low    */
+inline void set_clk_3()
 {
-    set_PORTE_pins(CLK3_PIN_BITFIELD);
+    clear_PORTA_pins(CLK3_PIN_BITFIELD);
 }
 
-static inline static void reset_clk_3()
+inline void reset_clk_3()
 {
-    clear_PORTE_pins(CLK3_PIN_BITFIELD);
+    set_PORTA_pins(CLK3_PIN_BITFIELD);
 }
 
-inline static void set_clk_4()
+inline void set_clk_4()
 {
-    set_PORTE_pins(CLK4_PIN_BITFIELD);
+    set_PORTC_pins(CLK4_PIN_BITFIELD);
 }
 
-static inline static void reset_clk_4()
+inline void reset_clk_4()
 {
-    clear_PORTE_pins(CLK4_PIN_BITFIELD);
+    clear_PORTC_pins(CLK4_PIN_BITFIELD);
 }
 /*void display_multiplexer_set_red_2_array(uint8_t data_buffer[])
 {
@@ -253,4 +260,13 @@ void display_multiplexer_task()
         }
     break;
     }
+}
+
+void show_Test_line()
+{
+    set_row_pattern(0xFF);
+}
+
+void reset_lines(){
+    reset_reset_matrix();
 }
