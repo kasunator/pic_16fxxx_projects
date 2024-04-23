@@ -248,7 +248,7 @@ void inline toggle_PORTC_pins(uint8_t bit_field)
 
 void inline set_PORTD_pins(uint8_t bit_field)
 {
-    PORTD |= bit_field;
+    PORTD = bit_field;
 }
 
 void inline clear_PORTD_pins(uint8_t bit_field)

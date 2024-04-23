@@ -49,10 +49,17 @@ static void PORTA_toggle_RA1()
 }
 
 uint8_t read_value = 0;
-uint8_t button_press = 0;
-uint8_t reset_flag = 0;
-uint8_t clk_flag = 0;
-uint8_t timer_active = 0;
+uint8_t btn_A_flag = 0;
+uint8_t btn_B_flag = 0;
+
+
+/*uint8_t k_array[] = { 0x7F, 0x08, 0x14, 0x22, 0x41}; */
+
+uint8_t k_array[] = { 0x00, 0x00, 0x7F, 0x08, 0x14, 0x22, 0x41, 0x00,
+                      0x00, 0x00, 0x7F, 0x08, 0x14, 0x22, 0x41, 0x00};
+
+uint8_t blank_array[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 void main(void) {
 
     /* system level init*/
@@ -68,58 +75,26 @@ void main(void) {
     reset_clk_4();
     
     Timer1_config();
-    
-    uint8_t timer_hdl_l = ms_timer_init();
-    uint8_t timer_hdl_2 = ms_timer_init();
-
+   
+    display_multiplexer_set_red_array(k_array);
+    display_multiplexer_set_green_array(blank_array);
     
     while (1)
     {
         ms_timer_task();
-        //delay();
-        /*if (ms_timer_get(timer_hdl_l) > 100) {
-            ms_timer_reset(timer_hdl_l);
-            if ()
-        }*/
-        
-        /*if (ms_timer_get(timer_hdl_2) > 100) {
-            ms_timer_reset(timer_hdl_2);
-            reset_reset_matrix();
-        }*/
+        display_multiplexer_task();
         
         if (button_A() == 1 )
         {
-            reset_flag =1;
+            btn_A_flag =1;
         }
         
         if (button_B() == 1 )
         {
-            clk_flag =1;
+            btn_B_flag =1;
         }
         
         
-        if (clk_flag == 1) {                
-            clk_flag = 0;
-            set_row_pattern(0xFF);
-            set_clk_3();
-            timer_active = 1;
-            ms_timer_reset(timer_hdl_l);
-        }
-        
-        if (reset_flag == 1) {
-            reset_flag = 0;
-            set_reset_matrix();
-            timer_active = 1;
-            ms_timer_reset(timer_hdl_l);
-        }
-        
-
-        if (ms_timer_get(timer_hdl_l) > 100 && timer_active == 1) {
-           // ms_timer_reset(timer_hdl_l);
-            timer_active = 0;
-            reset_clk_3();
-            reset_reset_matrix();
-        }
         
     }
 }

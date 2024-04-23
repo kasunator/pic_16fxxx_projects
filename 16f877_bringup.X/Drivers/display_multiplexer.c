@@ -44,8 +44,9 @@
  clk3 start 
  */
 
-#define LINE_PERIOD 20 /*20 ms this would be equivalen to horizontal frequency of Tv*/
-#define MINIMUM_PULSE_WIDTH 1 /* one milli second */
+#define LINE_PERIOD 1 /*20 ms this would be equivalen to horizontal frequency of Tv*/
+//#define MINIMUM_PULSE_WIDTH 4 /* one milli second */
+#define MINIMUM_PULSE_WIDTH 1
 
 #define  TOTAL_HORIZONTAL 32
 #define TOTAL_LINES_PER_COLOR 16
@@ -64,6 +65,7 @@
 typedef enum{
     INIT,
     RESET_STATE,
+    FRAME_START,
     RUN_STATE,
     CLOCK_HIGH_DELAY
 }enum_mltplxr_state;
@@ -155,12 +157,14 @@ inline void reset_clk_2()
  * make the clk go high and set the gpio high to  make the clk go low    */
 inline void set_clk_3()
 {
-    clear_PORTA_pins(CLK3_PIN_BITFIELD);
+    //clear_PORTA_pins(CLK3_PIN_BITFIELD);
+    set_PORTA_pins(CLK3_PIN_BITFIELD);
 }
 
 inline void reset_clk_3()
 {
-    set_PORTA_pins(CLK3_PIN_BITFIELD);
+    //set_PORTA_pins(CLK3_PIN_BITFIELD);
+    clear_PORTA_pins(CLK3_PIN_BITFIELD);
 }
 
 inline void set_clk_4()
@@ -188,19 +192,28 @@ void display_multiplexer_task()
     case INIT:
         timer_handle = ms_timer_init();
         pulse_timer_handle = ms_timer_init();
-        ms_timer_reset(timer_handle);
-        mltplxr_state = RUN_STATE;
+        /* reset all the lines */
+        reset_clk_1();
+        reset_clk_2();
+        reset_clk_3();
+        reset_clk_4();
+        mltplxr_state = RESET_STATE;
         break;
     case RESET_STATE:
-        ms_timer_reset(timer_handle);
+        set_reset_matrix();
+        reset_pulse_flag = 1;
+        /* wait for clock high delay for the reset line*/
+        mltplxr_state = CLOCK_HIGH_DELAY;
+        break;
+    case FRAME_START:
         horizontal_index = 0;
         red_index = 0;
         green_index = 0;
         red_array_1 = red_array_1_next; 
         green_array_1 = green_array_1_next;
-        set_row_pattern(red_array_1[TOTAL_LINES_PER_COLOR -  red_index]);
+        set_row_pattern(red_array_1[(TOTAL_LINES_PER_COLOR-1) - red_index]);
         red_index++;
-        ms_timer_reset(timer_handle);
+        horizontal_index++;
         ms_timer_reset(pulse_timer_handle);
         set_clk_3();
         mltplxr_state = CLOCK_HIGH_DELAY;
@@ -214,28 +227,52 @@ void display_multiplexer_task()
                 /* if the horizontal index in odd then 
                 * we should show green, else red 
                 */
-                if (horizontal_index & 0x01) { /* show green*/
-                    set_row_pattern(green_array_1[TOTAL_LINES_PER_COLOR - green_index]);
+                if (horizontal_index & 0x01) {
+                    /* show green*/
+                    set_row_pattern(green_array_1[(TOTAL_LINES_PER_COLOR-1) - green_index]);
                     green_index++;
                 } else { /* show red */
-                    set_row_pattern(red_array_1[TOTAL_LINES_PER_COLOR -  red_index]);
+                    set_row_pattern(red_array_1[(TOTAL_LINES_PER_COLOR-1) - red_index]);
                     red_index++;
                 }
+                
                 if ( horizontal_index > 0 && horizontal_index <= CLK3_BOUNDRY) {
                     //set clk 3
                     set_clk_3();
-                } else if (horizontal_index <= CLK4_BOUNDRY ) {
+                } else if (horizontal_index == CLK3_BOUNDRY + 1){
+                    /* we have to make clk3 go and park at 9*/
+                    set_clk_3(); 
+                }
+                
+                
+                if (horizontal_index > CLK3_BOUNDRY && horizontal_index <= CLK4_BOUNDRY ) {
                     //set clk 4
                     set_clk_4();
-                } else if (horizontal_index <= CLK1_BOUNDRY) {
+                } else if (horizontal_index == CLK4_BOUNDRY + 1) {
+                    /* we have to make clk4 go and park at 9*/
+                    set_clk_4(); 
+                }
+                
+                
+                if (horizontal_index > CLK4_BOUNDRY && horizontal_index <= CLK1_BOUNDRY) {
                     //set clk 1
                     set_clk_1();
-                } else if (horizontal_index <= CLK2_BOUNDRY) {
-                    //set clk 2
-                    set_clk_2();
+                } else if (horizontal_index == CLK1_BOUNDRY + 1) {
+                    /* we have to make clk1 go and park at 9*/
+                    set_clk_1(); 
                 } 
                 
+                
+                if (horizontal_index > CLK1_BOUNDRY && horizontal_index <= CLK2_BOUNDRY) {
+                    //set clk 2
+                    set_clk_2();
+                } else if (horizontal_index == CLK2_BOUNDRY + 1) {
+                    /* we have to make clk2 go and park at 9*/
+                    set_clk_2();
+                }
+                
                 horizontal_index++; /*increment the horizontal index */
+                mltplxr_state = CLOCK_HIGH_DELAY;
             } else {
                 frame_complete_flag  = 1;
                 set_reset_matrix();
@@ -253,10 +290,11 @@ void display_multiplexer_task()
             reset_clk_4();
             if (reset_pulse_flag == 1) {
                 reset_pulse_flag = 0;
-                mltplxr_state = RESET_STATE;
+                mltplxr_state = FRAME_START;
             } else {
                 mltplxr_state = RUN_STATE;
             }
+            ms_timer_reset(timer_handle);
         }
     break;
     }
