@@ -7,7 +7,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "../System/Timer_driver.h"
+#include "../System/Timer1_driver.h"
 #include "../System/GPIO_driver.h"
 
 /*
@@ -46,7 +46,7 @@
 
 #define LINE_PERIOD 1 /*20 ms this would be equivalen to horizontal frequency of Tv*/
 //#define MINIMUM_PULSE_WIDTH 4 /* one milli second */
-#define MINIMUM_PULSE_WIDTH 1
+#define MINIMUM_PULSE_WIDTH 4
 
 #define  TOTAL_HORIZONTAL 32
 #define TOTAL_LINES_PER_COLOR 16

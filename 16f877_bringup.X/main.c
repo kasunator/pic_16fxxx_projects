@@ -5,11 +5,12 @@
  * Created on February 4, 2024, 1:47 PM
  */
 
-#define XTAL_FREQUENCY 4000000 /* 4 mega HZ */
+#define XTAL_FREQUENCY 8000000 /* 4 mega HZ */
 #include <xc.h>
 #include <pic16f877a.h>
 #include "System/GPIO_driver.h"
-#include "System/Timer_driver.h"
+#include "System/Timer1_driver.h"
+#include "System/Timer0_driver.h"
 #include "Drivers/button_inputs.h"
 #include "Drivers/display_multiplexer.h"
 
@@ -37,9 +38,11 @@ void delay(){
 
 void __interrupt() isr(){
      
+    Timer0_isr();
     PORTB_int_isr();
     
     Timer1_isr();
+    
 }
 
 

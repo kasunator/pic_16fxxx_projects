@@ -10,7 +10,8 @@
 #include <xc.h>
 #include <pic16f877a.h>
 
-uint16_t load_count = 64636; /* for 1ms 65635 - c +1*/
+//uint16_t load_count = 64636; /* for 1ms 65635 - c +1*/
+uint16_t load_count = 65035; // load count for 500us 
 
 volatile uint16_t global_time = 0;
 volatile uint8_t timer_increment_flg = 0;
@@ -65,25 +66,7 @@ void Timer1_config()
     
 }
 
-void Timer0_config()
-{
- /*   Timer mode is selected by clearing bit T0CS
-    (OPTION_REG<5>). 
-  In Timer mode, the Timer0
-module will increment every instruction cycle (without prescaler). 
-  * If the TMR0 register is written, the increment is inhibited for the following two instruction cycles.
-  The user can work around this by writing an adjusted
-    value to the TMR0 register
-  * 
-  * The TMR0 interrupt is generated when the TMR0
-    register overflows from FFh to 00h. This overflow sets
-    bit TMR0IF (INTCON<2>). The interrupt can be
-    masked by clearing bit TMR0IE (INTCON<5>). Bit
-    TMR0IF must be cleared in software by the Timer0
-    module Interrupt Service Routine before re-enabling
-    this interrupt. 
-  */
-}
+
 
 
 void inline Timer1_isr()

@@ -10,7 +10,8 @@
       </logicalFolder>
       <logicalFolder name="f1" displayName="System" projectFiles="true">
         <itemPath>System/GPIO_driver.h</itemPath>
-        <itemPath>System/Timer_driver.h</itemPath>
+        <itemPath>System/Timer1_driver.h</itemPath>
+        <itemPath>System/Timer0_driver.h</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
@@ -31,7 +32,8 @@
       </logicalFolder>
       <logicalFolder name="f2" displayName="System" projectFiles="true">
         <itemPath>System/GPIO_driver.c</itemPath>
-        <itemPath>System/Timer_driver.c</itemPath>
+        <itemPath>System/Timer1_driver.c</itemPath>
+        <itemPath>System/Timer0_driver.c</itemPath>
       </logicalFolder>
       <itemPath>main.c</itemPath>
       <itemPath>marquee.c</itemPath>

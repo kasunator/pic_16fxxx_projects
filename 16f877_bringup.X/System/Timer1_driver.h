@@ -5,8 +5,8 @@
  * Created on February 7, 2024, 10:10 PM
  */
 
-#ifndef TIMER_DRIVER_H
-#define	TIMER_DRIVER_H
+#ifndef TIMER1_DRIVER_H
+#define	TIMER1_DRIVER_H
 
 #ifdef	__cplusplus
 extern "C" {
@@ -33,5 +33,5 @@ void ms_timer_task();
 }
 #endif
 
-#endif	/* TIMER_DRIVER_H */
+#endif	/* TIMER1_DRIVER_H */
 
