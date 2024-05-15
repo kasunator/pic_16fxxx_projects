@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include "../System/Timer1_driver.h"
 #include "../System/GPIO_driver.h"
+#include "../System/Timer0_driver.h"
 
 /*
  ------- clk2 end ------
@@ -190,8 +191,8 @@ void display_multiplexer_task()
 {
     switch(mltplxr_state){
     case INIT:
-        timer_handle = ms_timer_init();
-        pulse_timer_handle = ms_timer_init();
+        //timer_handle = ms_timer_init();
+        //pulse_timer_handle = ms_timer_init();
         /* reset all the lines */
         reset_clk_1();
         reset_clk_2();
@@ -214,15 +215,17 @@ void display_multiplexer_task()
         set_row_pattern(red_array_1[(TOTAL_LINES_PER_COLOR-1) - red_index]);
         red_index++;
         horizontal_index++;
-        ms_timer_reset(pulse_timer_handle);
+        //ms_timer_reset(pulse_timer_handle);
+        reset_timer0_flag();
         set_clk_3();
         mltplxr_state = CLOCK_HIGH_DELAY;
         break;
     case RUN_STATE:
-        if (ms_timer_get(timer_handle) >LINE_PERIOD) {
-            ms_timer_reset(timer_handle);
-            ms_timer_reset(pulse_timer_handle);
-            
+        //if (ms_timer_get(timer_handle) >LINE_PERIOD) {
+        //    ms_timer_reset(timer_handle);
+        //    ms_timer_reset(pulse_timer_handle);
+        if (get_timer0_flag() == 1) {
+            reset_timer0_flag();
             if (horizontal_index < TOTAL_HORIZONTAL) {
                 /* if the horizontal index in odd then 
                 * we should show green, else red 
@@ -282,7 +285,9 @@ void display_multiplexer_task()
         }
         break;
     case CLOCK_HIGH_DELAY:
-        if (ms_timer_get(pulse_timer_handle) >MINIMUM_PULSE_WIDTH ){
+        //if (ms_timer_get(pulse_timer_handle) >MINIMUM_PULSE_WIDTH ){
+        if (get_timer0_flag() == 1) {
+            reset_timer0_flag();
             reset_reset_matrix();
             reset_clk_1();
             reset_clk_2();
@@ -294,7 +299,7 @@ void display_multiplexer_task()
             } else {
                 mltplxr_state = RUN_STATE;
             }
-            ms_timer_reset(timer_handle);
+            //ms_timer_reset(timer_handle);
         }
     break;
     }

@@ -16,7 +16,9 @@ void Timer0_config();
 
 void inline Timer0_isr();
 
+uint8_t inline get_timer0_flag();
 
+void inline reset_timer0_flag();
 
 #ifdef	__cplusplus
 }
