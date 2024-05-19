@@ -76,11 +76,11 @@ void main(void) {
     reset_clk_2();
     reset_clk_3();
     reset_clk_4();
-    
+    Timer0_config();
     Timer1_config();
    
-    display_multiplexer_set_red_array(k_array);
-    display_multiplexer_set_green_array(blank_array);
+   display_multiplexer_set_red_array(k_array);
+   display_multiplexer_set_green_array(blank_array);
     
     while (1)
     {

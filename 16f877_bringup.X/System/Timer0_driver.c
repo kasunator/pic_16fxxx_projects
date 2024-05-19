@@ -73,7 +73,9 @@ clocks later.*/
     INTCONbits.PEIE = 1;
     /* enable global interrupts */
     INTCONbits.GIE = 1;
-    TMR0 = 6;
+    //TMR0 = 6;
+    //TMR0 = 131;
+    TMR0 = 131;
     /* writing to TMR0 when prescaler is assigned to TMR0 will clear
     * the prescaler count so now we should update the prescaler after 
      */
@@ -95,12 +97,14 @@ void inline Timer0_isr()
     if (INTCONbits.T0IF == 1) {
         INTCONbits.T0IF = 0;
         //TMR0 = 0;
-        TMR0 = 6;
+        //TMR0 = 6;
+        //TMR0 = 131;
+        TMR0 = 131;
         /* writing to TMR0 when prescaler is assigned to TMR0 will clear
          * the prescaler count so now we should update the prescaler after 
          * writing TMR0 */
         //OPTION_REG &= 0xF9; //to set PS2:PS0 to b001 for prescaler of 4
-        toggle_PORTE_pins(0x04);
+        //toggle_PORTE_pins(0x04); for testing
         timer0_flag = 1;
     }
 
