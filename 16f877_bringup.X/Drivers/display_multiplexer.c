@@ -423,6 +423,7 @@ void display_multiplexer_task()
                 //horizontal_index++; /*increment the horizontal index */
                 mltplxr_state = CLOCK_HIGH_DELAY;
             } else {
+                set_row_pattern(0x00);
                 frame_complete_flag  = 1;
                 set_reset_matrix();
                 reset_pulse_flag = 1;
