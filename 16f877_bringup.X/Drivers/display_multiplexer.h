@@ -17,9 +17,9 @@ void display_multiplexer_set_red_array(uint8_t data_buffer[]);
 
 void display_multiplexer_set_green_array(uint8_t data_buffer[]);
 
-uint8_t get_frame_complete_flag();
+inline uint8_t get_frame_complete_flag();
 
-void reset_frame_complete_flag();
+inline void reset_frame_complete_flag();
     
 void display_multiplexer_task();
 

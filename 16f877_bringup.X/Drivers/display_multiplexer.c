@@ -113,11 +113,11 @@ void display_multiplexer_set_green_array(uint8_t data_buffer[])
     green_array_1_next = data_buffer;
 }
 
-uint8_t get_frame_complete_flag()
+inline uint8_t get_frame_complete_flag()
 {
     return frame_complete_flag;
 }
-void reset_frame_complete_flag()
+inline void reset_frame_complete_flag()
 {
     frame_complete_flag = 0;
 }
