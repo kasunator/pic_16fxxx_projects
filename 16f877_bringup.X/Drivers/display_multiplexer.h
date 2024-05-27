@@ -13,6 +13,10 @@
 extern "C" {
 #endif
 
+#include <xc.h>
+#include <pic16f877a.h>
+    
+    
 void display_multiplexer_set_red_array(uint8_t data_buffer[]);
 
 void display_multiplexer_set_green_array(uint8_t data_buffer[]);
@@ -26,27 +30,27 @@ void display_multiplexer_task();
 void show_Test_line();
 
 
-inline void set_row_pattern(uint8_t pattern);
+//static inline void set_row_pattern(uint8_t pattern);
 
-inline void set_reset_matrix();
+//static inline void set_reset_matrix();
 
-inline void reset_reset_matrix();
+//static inline void reset_reset_matrix();
 
-inline void set_clk_1();
+//static inline void set_clk_1();
 
-inline void reset_clk_1();
+//static inline void reset_clk_1();
 
-inline void set_clk_2();
+//static inline void set_clk_2();
 
-inline void reset_clk_2();
+//static inline void reset_clk_2();
 
-inline void set_clk_3();
+//static inline void set_clk_3();
 
-inline void reset_clk_3();
+//static inline void reset_clk_3();
 
-inline void set_clk_4();
+//static inline void set_clk_4();
 
-inline void reset_clk_4();
+//static inline void reset_clk_4();
 
 
 #ifdef	__cplusplus

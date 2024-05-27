@@ -128,32 +128,32 @@ inline void set_row_pattern(uint8_t pattern){
 
 
 
-inline void set_reset_matrix()
+static inline void set_reset_matrix()
 {
     set_PORTE_pins(RESET_MATRIX_PIN_BITFIELD);
 }
 
-inline void reset_reset_matrix()
+static inline void reset_reset_matrix()
 {
     clear_PORTE_pins(RESET_MATRIX_PIN_BITFIELD);
 }
 
-inline void set_clk_1()
+static inline void set_clk_1()
 {
     set_PORTE_pins(CLK1_PIN_BITFIELD);
 }
 
-inline void reset_clk_1()
+static inline void reset_clk_1()
 {
     clear_PORTE_pins(CLK1_PIN_BITFIELD);
 }
 
-inline void set_clk_2()
+static inline void set_clk_2()
 {
     set_PORTE_pins(CLK2_PIN_BITFIELD);
 }
 
-inline void reset_clk_2()
+static inline void reset_clk_2()
 {
     clear_PORTE_pins(CLK2_PIN_BITFIELD);
 }
@@ -161,24 +161,24 @@ inline void reset_clk_2()
  * so we have to put and external pull up resistor
  * so set and reset is inverted i.e we have to clear the GPIO to
  * make the clk go high and set the gpio high to  make the clk go low    */
-inline void set_clk_3()
+static inline void set_clk_3()
 {
     //clear_PORTA_pins(CLK3_PIN_BITFIELD);
     set_PORTA_pins(CLK3_PIN_BITFIELD);
 }
 
-inline void reset_clk_3()
+static inline void reset_clk_3()
 {
     //set_PORTA_pins(CLK3_PIN_BITFIELD);
     clear_PORTA_pins(CLK3_PIN_BITFIELD);
 }
 
-inline void set_clk_4()
+static inline void set_clk_4()
 {
     set_PORTC_pins(CLK4_PIN_BITFIELD);
 }
 
-inline void reset_clk_4()
+static inline void reset_clk_4()
 {
     clear_PORTC_pins(CLK4_PIN_BITFIELD);
 }
