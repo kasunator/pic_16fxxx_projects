@@ -149,15 +149,15 @@ void main(void) {
             if (state == 0){
                 memcpy(&red_array_pong, &red_array_ping, sizeof(red_array_ping));
                 memcpy(&green_array_pong, &green_array_ping, sizeof(green_array_ping));
-                red_array = red_array_pong;
-                green_array = green_array_pong;
+                red_array = &red_array_pong;
+                green_array = &green_array_pong;
                 state = 1;
             } else {
                 
                 memcpy(&red_array_ping, &red_array_pong, sizeof(red_array_ping));
                 memcpy(&green_array_ping, &green_array_pong, sizeof(green_array_ping));
-                red_array = red_array_ping;
-                green_array = green_array_ping;
+                red_array = &red_array_ping;
+                green_array = &green_array_ping;
                 state = 0;
             }
             
@@ -175,8 +175,10 @@ void main(void) {
                 scroll_index = 0;
             }
             buffer_ready_flag = 1;
-            display_multiplexer_set_red_array(&red_array);
-            display_multiplexer_set_green_array(&green_array);
+            //display_multiplexer_set_red_array(&red_array[0]);
+            //display_multiplexer_set_green_array(&green_array[0]);
+            display_multiplexer_set_red_array(red_array);
+            display_multiplexer_set_green_array(green_array);
         }
         /*
         if (buffer_ready_flag == 1 && get_frame_complete_flag() == 1 ) {
