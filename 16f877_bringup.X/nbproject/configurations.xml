@@ -38,6 +38,10 @@
       <itemPath>main.c</itemPath>
       <itemPath>marquee.c</itemPath>
       <itemPath>marquee.h</itemPath>
+      <itemPath>boy.c</itemPath>
+      <itemPath>boy.h</itemPath>
+      <itemPath>screen_buffer.c</itemPath>
+      <itemPath>screen_buffer.h</itemPath>
     </logicalFolder>
   </logicalFolder>
   <sourceRootList>

@@ -14,6 +14,7 @@
 #include "Drivers/button_inputs.h"
 #include "Drivers/display_multiplexer.h"
 #include "marquee.h"
+#include "screen_buffer.h"
 #include <string.h>
 
 
@@ -77,7 +78,7 @@ void main(void) {
     //reset_clk_4();
     Timer0_config();
     Timer1_config();
-   
+    screen_buffer_init();
     marquee_init();
 
     while (1)
@@ -96,7 +97,7 @@ void main(void) {
         }
         
         marquee_task();
-
+        screen_buffer_task();
         /*
         if (buffer_ready_flag == 1 && get_frame_complete_flag() == 1 ) {
             buffer_ready_flag = 0;

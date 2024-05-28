@@ -13,49 +13,43 @@
 #include <string.h>
 #include "System/Timer1_driver.h"
 #include "marquee.h"
+#include"screen_buffer.h"
 
 const uint8_t A[] = {0x18, 0x24, 0x42, 0x42, 0x7E, 0x42, 0x42, 0x00};
 const uint8_t B[] =  {0x3E, 0x42, 0x42, 0x3E, 0x42, 0x42, 0x3E, 0x00};
 const uint8_t C[] = {0x00, 0x3E, 0x41, 0x41, 0x41, 0x22, 0x00, 0x00}; 
 const uint8_t K[] = {0x42, 0x22, 0x12, 0x0E, 0x12, 0x22, 0x42, 0x00};
 
-uint8_t green_array_ping[16] = {};
-uint8_t red_array_ping[16] = {};
 
-uint8_t red_array_pong[16] = {};
-uint8_t green_array_pong[16] = {};
 
-uint8_t* red_array;
-uint8_t* green_array; 
+
 
 uint8_t scroll_timer = 0;
 
 uint8_t scroll_index = 0;
 uint8_t i = 0;
+
+#if 0
 uint8_t temp1 =0;
 uint8_t temp2 =0;
 
 uint8_t temp_g_1 = 0;
 uint8_t temp_g_2 = 0;
 uint8_t state = 0;
-
+#endif 
 
 
 void marquee_init(){
-    memcpy(&red_array_ping, &B, sizeof(B));
-    memset(&red_array_ping+8, 0, 8 );
-    memset(&green_array_ping, 0, 16);
     
-    memset(&red_array_pong, 0, 16);
-    memset(&green_array_pong, 0, 16);
-   
-   //display_multiplexer_set_red_array(k_array);
-   //display_multiplexer_set_green_array(blank_array);
-   display_multiplexer_set_red_array(&red_array_ping[0]);
-   display_multiplexer_set_green_array(&green_array_ping[0]);
+
+   screen_clear_bitfield_sprite_red(B, 0, sizeof(B), 1);
    scroll_timer = ms_timer_init();
+
+
 }
 
+
+#if 0
 void marquee_task(){
     
     if (ms_timer_get(scroll_timer) >= 1000) {
@@ -99,5 +93,25 @@ void marquee_task(){
         //display_multiplexer_set_green_array(&green_array[0]);
         display_multiplexer_set_red_array(red_array);
         display_multiplexer_set_green_array(green_array);
+    }
+}
+
+void screen_overlay_bitfield_sprite_red( uint8_t* buffer,
+                                           uint8_t start_byte, uint8_t length);
+
+void screen_clear_bitfield_sprite_red( uint8_t* buffer, uint8_t start_byte, 
+                                                               uint8_t length);
+#endif 
+
+void marquee_task(){
+    
+    if (ms_timer_get(scroll_timer) >= 1000) {
+        ms_timer_reset(scroll_timer);
+        screen_clear_bitfield_sprite_red(B, scroll_index, sizeof(B), 1);
+        scroll_index++;
+        if (scroll_index > 15) {
+            scroll_index = 0;
+        }
+        screen_overlay_bitfield_sprite_red(B, scroll_index, sizeof(B), 1);
     }
 }
