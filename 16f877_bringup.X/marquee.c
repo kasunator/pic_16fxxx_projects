@@ -102,12 +102,14 @@ void screen_overlay_bitfield_sprite_red( uint8_t* buffer,
 void screen_clear_bitfield_sprite_red( uint8_t* buffer, uint8_t start_byte, 
                                                                uint8_t length);
 #endif 
-
+uint8_t done= 0;
 void marquee_task(){
     
-    if (ms_timer_get(scroll_timer) >= 1000) {
+    if (ms_timer_get(scroll_timer) >= 1000 && done == 0) {
+        //done =1;
         ms_timer_reset(scroll_timer);
-        screen_clear_bitfield_sprite_red(B, scroll_index, sizeof(B), 1);
+        //screen_clear_bitfield_sprite_red(B, scroll_index, sizeof(B), 1);
+        screen_flush_red_buffer();
         scroll_index++;
         if (scroll_index > 15) {
             scroll_index = 0;

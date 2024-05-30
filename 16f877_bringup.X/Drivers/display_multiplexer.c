@@ -434,7 +434,7 @@ void display_multiplexer_task()
     case CLOCK_HIGH_DELAY:
         //if (ms_timer_get(pulse_timer_handle) >MINIMUM_PULSE_WIDTH ){
         if (get_timer0_flag() == 1) {
-            reset_timer0_flag();
+            reset_timer0_long_delay();
             
             if (horizontal_index & 0x01) {
                     /* show green*/

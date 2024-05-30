@@ -11,7 +11,8 @@
 #include <pic16f877a.h>
 #include "GPIO_driver.h"
 
-volatile uint8_t timer0_flag = 1;
+volatile uint8_t timer0_flag = 0;
+volatile uint8_t long_delay_flag = 0;
 void Timer0_config()
 {
     
@@ -75,7 +76,8 @@ clocks later.*/
     INTCONbits.GIE = 1;
     //TMR0 = 6;
     //TMR0 = 131;
-    TMR0 = 131;
+    //TMR0 = 131;
+    TMR0 = 180;
     /* writing to TMR0 when prescaler is assigned to TMR0 will clear
     * the prescaler count so now we should update the prescaler after 
      */
@@ -98,8 +100,8 @@ void inline Timer0_isr()
         INTCONbits.T0IF = 0;
         //TMR0 = 0;
         //TMR0 = 6;
-        //TMR0 = 131;
-        TMR0 = 131;
+        //TMR0 = 220;
+        
         /* writing to TMR0 when prescaler is assigned to TMR0 will clear
          * the prescaler count so now we should update the prescaler after 
          * writing TMR0 */
@@ -116,5 +118,11 @@ uint8_t inline get_timer0_flag(){
 
 
 void inline reset_timer0_flag(){
+    TMR0 = 230;
+    timer0_flag = 0;
+}
+
+void inline reset_timer0_long_delay(){
+    TMR0 = 130;
     timer0_flag = 0;
 }

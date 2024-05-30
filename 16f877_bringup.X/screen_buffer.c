@@ -196,7 +196,25 @@ void screen_reset_buffer_green( uint8_t start_byte, uint8_t length,
     }
 }
 
+void screen_flush_red_buffer(){
+    uint8_t i =0;
+    if (state == 0) {
+        //write to pong, ping being used
+        memset(red_array_pong,0,sizeof(red_array_pong));
+    } else {
+        memset(red_array_ping,0,sizeof(red_array_ping));
+    }
+}
 
+void screen_flush_green_buffer(){
+    uint8_t i =0;
+    if (state == 0) {
+        //write to pong, ping being used
+        memset(green_array_pong,0,sizeof(green_array_pong));
+    } else {
+        memset(green_array_pong,0,sizeof(green_array_pong));
+    }
+}
 
 void screen_buffer_task(){
 

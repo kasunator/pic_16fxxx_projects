@@ -20,6 +20,8 @@ uint8_t inline get_timer0_flag();
 
 void inline reset_timer0_flag();
 
+void inline reset_timer0_long_delay();
+
 #ifdef	__cplusplus
 }
 #endif
