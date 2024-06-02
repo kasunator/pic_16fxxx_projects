@@ -12,7 +12,9 @@
 extern "C" {
 #endif
 
+void boy_init();
 
+void boy_task();
 
 
 #ifdef	__cplusplus

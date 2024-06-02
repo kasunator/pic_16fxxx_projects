@@ -29,6 +29,9 @@ uint8_t* green_array;
 uint8_t state = 0;
 uint8_t buffer_timer;
 uint8_t buffer_update_flag = 0;
+
+static void frame_cmplt_cb_func();
+
 /*
  * 
  */
@@ -38,7 +41,7 @@ void screen_buffer_init(){
     
     memset(&red_array_pong, 0, 16);
     memset(&green_array_pong, 0, 16);
-   
+    set_frame_cmplt_cb(&frame_cmplt_cb_func);
     //display_multiplexer_set_red_array(&red_array_ping[0]);
     //display_multiplexer_set_green_array(&green_array_ping[0]);
     display_multiplexer_set_red_array(&red_array_pong[0]);
@@ -196,6 +199,55 @@ void screen_reset_buffer_green( uint8_t start_byte, uint8_t length,
     }
 }
 
+void screen_set_pixel_green( uint8_t x, uint8_t y){
+
+    buffer_update_flag = 1;
+    if (state == 0) {
+        //write to pong, ping being used
+        green_array_pong[y] |= 1<<(7-x);
+    } else {
+        green_array_ping[y] |= 1<<(7-x);
+    }   
+
+}
+
+void screen_reset_pixel_green( uint8_t x, uint8_t y){
+
+    buffer_update_flag = 1;
+    if (state == 0) {
+        //write to pong, ping being used
+        green_array_pong[y] &= ~(1<<(7-x));
+    } else {
+        green_array_ping[y] &= ~(1<<(7-x));
+    }   
+
+}
+
+
+void screen_set_pixel_red( uint8_t x, uint8_t y){
+
+    buffer_update_flag = 1;
+    if (state == 0) {
+        //write to pong, ping being used
+        red_array_pong[y] |= 1<<(7-x);
+    } else {
+        red_array_ping[y] |= 1<<(7-x);
+    }   
+}
+
+void screen_reset_pixel_red( uint8_t x, uint8_t y){
+
+    buffer_update_flag = 1;
+    if (state == 0) {
+        //write to pong, ping being used
+        red_array_pong[y] &= ~(1<<(7-x));
+    } else {
+        red_array_ping[y] &= ~(1<<(7-x));
+    }   
+
+}
+
+
 void screen_flush_red_buffer(){
     uint8_t i =0;
     if (state == 0) {
@@ -216,6 +268,15 @@ void screen_flush_green_buffer(){
     }
 }
 
+static void frame_cmplt_cb_func(){
+    if (state == 0 ){
+        state = 1;
+    } else if (state == 1) {
+        state = 0;
+    }
+}
+
+
 void screen_buffer_task(){
 
     if (ms_timer_get(buffer_timer) >= 100) {
@@ -225,8 +286,8 @@ void screen_buffer_task(){
             buffer_update_flag = 0;
             //memcpy(&red_array_pong, &red_array_ping, sizeof(red_array_ping));
             //memcpy(&green_array_pong, &green_array_ping, sizeof(green_array_ping));
-            //memcpy(&red_array_ping, &red_array_pong, sizeof(red_array_ping));
-            //memcpy(&green_array_ping, &green_array_pong, sizeof(green_array_ping));
+            memcpy(&red_array_ping, &red_array_pong, sizeof(red_array_ping));
+            memcpy(&green_array_ping, &green_array_pong, sizeof(green_array_ping));
             red_array = &red_array_pong;
             green_array = &green_array_pong;
             state = 1;
@@ -234,8 +295,8 @@ void screen_buffer_task(){
             buffer_update_flag = 0;
             //memcpy(&red_array_ping, &red_array_pong, sizeof(red_array_ping));
             //memcpy(&green_array_ping, &green_array_pong, sizeof(green_array_ping));
-            //memcpy(&red_array_pong, &red_array_ping, sizeof(red_array_ping));
-            //memcpy(&green_array_pong, &green_array_ping, sizeof(green_array_ping));
+            memcpy(&red_array_pong, &red_array_ping, sizeof(red_array_ping));
+            memcpy(&green_array_pong, &green_array_ping, sizeof(green_array_ping));
             red_array = &red_array_ping;
             green_array = &green_array_ping;
             state = 0;

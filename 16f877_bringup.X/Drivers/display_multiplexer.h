@@ -29,6 +29,9 @@ void display_multiplexer_task();
 
 void show_Test_line();
 
+typedef void (*frame_cmplt_cb_t)();
+
+void set_frame_cmplt_cb(frame_cmplt_cb_t cb);
 
 //static inline void set_row_pattern(uint8_t pattern);
 

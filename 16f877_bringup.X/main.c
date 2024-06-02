@@ -56,11 +56,6 @@ static void PORTA_toggle_RA1()
 
 
 
-uint8_t read_value = 0;
-uint8_t btn_A_flag = 0;
-uint8_t btn_B_flag = 0;
-
-
 uint8_t buffer_ready_flag = 0;
 
 void main(void) {
@@ -86,15 +81,7 @@ void main(void) {
         ms_timer_task();
         display_multiplexer_task();
         
-        if (button_A() == 1 )
-        {
-            btn_A_flag =1;
-        }
-        
-        if (button_B() == 1 )
-        {
-            btn_B_flag =1;
-        }
+
         
         marquee_task();
         screen_buffer_task();

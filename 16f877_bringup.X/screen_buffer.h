@@ -30,9 +30,20 @@ void screen_reset_buffer_red( uint8_t start_byte, uint8_t length, uint8_t circul
 
 void screen_reset_buffer_green( uint8_t start_byte, uint8_t length, uint8_t circular);
 
+void screen_set_pixel_green( uint8_t x, uint8_t y);
+
+void screen_reset_pixel_green( uint8_t x, uint8_t y);
+
+void screen_set_pixel_red( uint8_t x, uint8_t y);
+
+void screen_reset_pixel_red( uint8_t x, uint8_t y);
+
 void screen_flush_red_buffer();
 
 void screen_flush_green_buffer();
+
+
+
 
 void screen_buffer_task();
 

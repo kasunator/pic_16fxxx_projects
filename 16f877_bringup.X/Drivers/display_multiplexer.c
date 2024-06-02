@@ -103,6 +103,8 @@ static uint8_t green_index = 0;
 static uint8_t frame_complete_flag = 0;
 static uint8_t reset_pulse_flag = 0;
 
+static frame_cmplt_cb_t frame_cmplt_cb = NULL;
+
 void display_multiplexer_set_red_array(uint8_t data_buffer[])
 {
     red_array_1_next = data_buffer;
@@ -182,6 +184,14 @@ static inline void reset_clk_4()
 {
     clear_PORTC_pins(CLK4_PIN_BITFIELD);
 }
+
+
+
+void set_frame_cmplt_cb(frame_cmplt_cb_t cb){
+    frame_cmplt_cb = cb;
+}
+
+
 /*void display_multiplexer_set_red_2_array(uint8_t data_buffer[])
 {
     red_array_2_next = data_buffer;
@@ -426,6 +436,9 @@ void display_multiplexer_task()
                 set_row_pattern(0x00);
                 frame_complete_flag  = 1;
                 set_reset_matrix();
+                if (frame_cmplt_cb != NULL){
+                    frame_cmplt_cb();
+                }
                 reset_pulse_flag = 1;
                 mltplxr_state = RESET_HIGH_DELAY;
             }
