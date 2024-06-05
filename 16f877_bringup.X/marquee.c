@@ -13,7 +13,8 @@
 #include <string.h>
 #include "System/Timer1_driver.h"
 #include "marquee.h"
-#include"screen_buffer.h"
+#include "screen_buffer.h"
+#include "boy.h"
 
 const uint8_t A[] = {0x18, 0x24, 0x42, 0x42, 0x7E, 0x42, 0x42, 0x00};
 const uint8_t B[] =  {0x3E, 0x42, 0x42, 0x3E, 0x42, 0x42, 0x3E, 0x00};
@@ -106,6 +107,7 @@ uint8_t done= 0;
 void marquee_task(){
     
     if (ms_timer_get(scroll_timer) >= 1000 && done == 0) {
+        boy_task();
         //done =1;
         ms_timer_reset(scroll_timer);
         //screen_clear_bitfield_sprite_red(B, scroll_index, sizeof(B), 1);
@@ -115,5 +117,6 @@ void marquee_task(){
             scroll_index = 0;
         }
         screen_overlay_bitfield_sprite_red(B, scroll_index, sizeof(B), 1);
+        screen_set_pixel_green(boy_location.x, boy_location.y);
     }
 }

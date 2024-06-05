@@ -12,6 +12,13 @@
 extern "C" {
 #endif
 
+typedef struct {
+    uint8_t x:4;
+    uint8_t y:4;
+}dot_location_t;    
+    
+ dot_location_t boy_location;   
+    
 void boy_init();
 
 void boy_task();

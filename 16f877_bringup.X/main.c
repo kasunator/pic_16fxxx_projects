@@ -16,6 +16,7 @@
 #include "marquee.h"
 #include "screen_buffer.h"
 #include <string.h>
+#include "boy.h"
 
 
 
@@ -75,7 +76,8 @@ void main(void) {
     Timer1_config();
     screen_buffer_init();
     marquee_init();
-
+    boy_init();
+    
     while (1)
     {
         ms_timer_task();
@@ -85,6 +87,7 @@ void main(void) {
         
         marquee_task();
         screen_buffer_task();
+        
         /*
         if (buffer_ready_flag == 1 && get_frame_complete_flag() == 1 ) {
             buffer_ready_flag = 0;

@@ -10,12 +10,9 @@
 #include <xc.h>
 #include <pic16f877a.h>
 #include "Drivers/button_inputs.h"
-#include"screen_buffer.h"
+#include "screen_buffer.h"
+#include "boy.h"
 
-typedef struct {
-    uint8_t x:4;
-    uint8_t y:4;
-}dot_location_t;
 
 typedef struct {
     uint8_t up:1;
@@ -33,7 +30,7 @@ btn_bit_field_t btn_bit_field = {0};
 
 void boy_init(){
     boy_location.x = 4;
-    boy_location.y = 0;
+    boy_location.y = 15;
 }
 
 
@@ -66,20 +63,20 @@ void boy_task(){
     if (btn_bit_field.left ==1) {
         btn_bit_field.left = 0;
         
-        if (boy_location.x > 0){
-            boy_location.x--;
-            screen_flush_green_buffer();
+        if (boy_location.x < 7){
+            boy_location.x++;
+            //screen_flush_green_buffer();
+           // screen_set_pixel_green(boy_location.x, boy_location.y);
         }
     }
     
     if (btn_bit_field.right ==1) {
         btn_bit_field.right= 0;
         
-        if (boy_location.x <8){
-            boy_location.x++;
-            screen_flush_green_buffer();
-
+        if (boy_location.x > 0){
+            boy_location.x--;
+            //screen_flush_green_buffer();
+            //screen_set_pixel_green(boy_location.x, boy_location.y);
         }
-        
     }
 }
