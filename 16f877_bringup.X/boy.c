@@ -10,6 +10,7 @@
 #include <xc.h>
 #include <pic16f877a.h>
 #include "Drivers/button_inputs.h"
+#include "System/Timer1_driver.h"
 #include "screen_buffer.h"
 #include "boy.h"
 
@@ -27,37 +28,41 @@ dot_location_t boy_location;
 
 btn_bit_field_t btn_bit_field = {0};
 
+uint8_t button_timer = 0xFF;
 
 void boy_init(){
     boy_location.x = 4;
     boy_location.y = 15;
+    button_timer = ms_timer_init();
 }
 
 
+
 void boy_task(){
-    
-    if (button_A() == 1 ){
-        btn_bit_field.btn_A =1;
-    }
+    if ( ms_timer_get(button_timer)> 500) {
+        ms_timer_reset(button_timer);
+        if (button_A() == 1 ){
+            btn_bit_field.btn_A =1;
+        }
+        if (button_B() == 1 ){
+            btn_bit_field.btn_B =1;
+        }
 
-    if (button_B() == 1 ){
-        btn_bit_field.btn_B =1;
-    }
-    
-    if (button_up() == 1){
-        btn_bit_field.up = 1;
-    }
+        if (button_up() == 1){
+            btn_bit_field.up = 1;
+        }
 
-    if (button_down() == 1) {
-        btn_bit_field.down = 1;
-    }
+        if (button_down() == 1) {
+            btn_bit_field.down = 1;
+        }
 
-    if (button_left() == 1) {
-        btn_bit_field.left =1;
-    }
+        if (button_left() == 1) {
+            btn_bit_field.left =1;
+        }
 
-    if( button_right() == 1) {
-        btn_bit_field.right = 1; 
+        if( button_right() == 1) {
+            btn_bit_field.right = 1; 
+        }
     }
     
     if (btn_bit_field.left ==1) {
