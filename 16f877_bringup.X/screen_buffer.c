@@ -27,7 +27,7 @@ uint8_t green_array_pong[16] = {};
 uint8_t* red_array;
 uint8_t* green_array; 
 uint8_t state = 0;
-uint8_t buffer_timer;
+uint8_t state_changed_flag = 0;
 uint8_t buffer_update_flag = 0;
 
 static void frame_cmplt_cb_func();
@@ -42,11 +42,9 @@ void screen_buffer_init(){
     memset(&red_array_pong, 0, 16);
     memset(&green_array_pong, 0, 16);
     set_frame_cmplt_cb(&frame_cmplt_cb_func);
-    //display_multiplexer_set_red_array(&red_array_ping[0]);
-    //display_multiplexer_set_green_array(&green_array_ping[0]);
-    display_multiplexer_set_red_array(&red_array_pong[0]);
-    display_multiplexer_set_green_array(&green_array_pong[0]);
-    buffer_timer = ms_timer_init();
+    display_multiplexer_set_red_array(&red_array_ping[0]);
+    display_multiplexer_set_green_array(&green_array_ping[0]);
+
 }
 
 void screen_overlay_bitfield_sprite_red( uint8_t* buffer, uint8_t start_byte,
@@ -268,44 +266,54 @@ void screen_flush_green_buffer(){
     }
 }
 
+/*
+ * ====================================
+ * |          FRAME START              |
+ * |red_array_1 = red_array_1_next     |
+ * |green_array_1 = green_array_1_next |
+ * ====================================
+                 |
+ *               V
+ * ====================================
+ * |          frame_complete_cb()      |
+ * |This is where we should            |
+ * | assign a new buffer               |
+ * |                                   |
+ * ====================================
+ */
+
 static void frame_cmplt_cb_func(){
-    if (state == 0 ){
-        state = 1;
-    } else if (state == 1) {
-        state = 0;
+    if (buffer_update_flag == 1) {
+        buffer_update_flag = 0;
+        if (state == 0){
+            state = 1;
+            red_array = &red_array_pong;
+            green_array = &green_array_pong;
+        } else if (state == 1) {
+            state = 0;
+            red_array = &red_array_ping;
+            green_array = &green_array_ping;
+        }
+        display_multiplexer_set_red_array(red_array);
+        display_multiplexer_set_green_array(green_array);
+        state_changed_flag = 1;
     }
+    
 }
 
 
 void screen_buffer_task(){
 
-    if (ms_timer_get(buffer_timer) >= 100) {
-        ms_timer_reset(buffer_timer);
-
-        if (state == 0 && buffer_update_flag ==1){
-            buffer_update_flag = 0;
-            //memcpy(&red_array_pong, &red_array_ping, sizeof(red_array_ping));
-            //memcpy(&green_array_pong, &green_array_ping, sizeof(green_array_ping));
-            memcpy(&red_array_ping, &red_array_pong, sizeof(red_array_ping));
-            memcpy(&green_array_ping, &green_array_pong, sizeof(green_array_ping));
-            red_array = &red_array_pong;
-            green_array = &green_array_pong;
-            state = 1;
-        } else if (state == 1 && buffer_update_flag == 1) {
-            buffer_update_flag = 0;
-            //memcpy(&red_array_ping, &red_array_pong, sizeof(red_array_ping));
-            //memcpy(&green_array_ping, &green_array_pong, sizeof(green_array_ping));
-            memcpy(&red_array_pong, &red_array_ping, sizeof(red_array_ping));
-            memcpy(&green_array_pong, &green_array_ping, sizeof(green_array_ping));
-            red_array = &red_array_ping;
-            green_array = &green_array_ping;
-            state = 0;
+    /* The sole purpose of this part of the code is to clear one of the 
+     * ping pong buffers that is not currently used*/
+    if (state_changed_flag == 1) {
+        state_changed_flag =0;
+        if (state == 0) {
+            memset(&red_array_pong, 0, sizeof(red_array_pong));
+            memset(&green_array_pong, 0, sizeof(green_array_pong));
+        } else if (state == 1) {
+            memset(&red_array_ping, 0, sizeof(red_array_ping));
+            memset(&green_array_ping, 0, sizeof(green_array_ping));
         }
-
-        //display_multiplexer_set_red_array(&red_array[0]);
-        //display_multiplexer_set_green_array(&green_array[0]);
-        display_multiplexer_set_red_array(red_array);
-        display_multiplexer_set_green_array(green_array);
     }
-
 }
