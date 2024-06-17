@@ -309,11 +309,15 @@ void screen_buffer_task(){
     if (state_changed_flag == 1) {
         state_changed_flag =0;
         if (state == 0) {
-            memset(&red_array_pong, 0, sizeof(red_array_pong));
-            memset(&green_array_pong, 0, sizeof(green_array_pong));
+            //memset(&red_array_pong, 0, sizeof(red_array_pong));
+            //memset(&green_array_pong, 0, sizeof(green_array_pong));
+            memcpy(&red_array_pong, &red_array_ping, sizeof(red_array_pong));
+            memcpy(&green_array_pong, &green_array_ping, sizeof(green_array_pong));
         } else if (state == 1) {
-            memset(&red_array_ping, 0, sizeof(red_array_ping));
-            memset(&green_array_ping, 0, sizeof(green_array_ping));
+            //memset(&red_array_ping, 0, sizeof(red_array_ping));
+            //memset(&green_array_ping, 0, sizeof(green_array_ping));
+            memcpy(&red_array_ping, &red_array_pong, sizeof(red_array_ping));
+            memcpy(&green_array_ping,&green_array_pong, sizeof(green_array_ping));
         }
     }
 }

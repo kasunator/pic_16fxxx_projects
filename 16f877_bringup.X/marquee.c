@@ -113,12 +113,13 @@ void marquee_task(){
         //done =1;
         ms_timer_reset(scroll_timer);
         //screen_clear_bitfield_sprite_red(B, scroll_index, sizeof(B), 1);
+        screen_reset_buffer_red(scroll_index, sizeof(B), 1);
         //screen_flush_red_buffer();
         scroll_index++;
         if (scroll_index > 15) {
             scroll_index = 0;
         }
         screen_overlay_bitfield_sprite_red(B, scroll_index, sizeof(B), 1);
-        screen_set_pixel_green(boy_location.x, boy_location.y);
+        //screen_set_pixel_green(boy_location.x, boy_location.y);
     }
 }

@@ -84,9 +84,9 @@ void main(void) {
         display_multiplexer_task();
         
 
-        
-        marquee_task();
         screen_buffer_task();
+        marquee_task();
+        
         
         /*
         if (buffer_ready_flag == 1 && get_frame_complete_flag() == 1 ) {
