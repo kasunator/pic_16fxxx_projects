@@ -74,6 +74,11 @@ void main(void) {
     //reset_clk_4();
     Timer0_config();
     Timer1_config();
+    
+    button_inputs_init();
+
+
+    
     screen_buffer_init();
     marquee_init();
     boy_init();
@@ -83,7 +88,7 @@ void main(void) {
         ms_timer_task();
         display_multiplexer_task();
         
-
+        button_input_task();
         screen_buffer_task();
         marquee_task();
         
